@@ -1,0 +1,511 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--Created with Liquid Studio (https://www.liquid-technologies.com)-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="diagram">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="diagram_value" type="xs:string" />
+                <xs:element name="organizationGoal" type="OrganizationGoalType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="treasury" type="TreasuryType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="decisionMakingMethod" type="DecisionMakingMethodType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="tokenManager" type="TokenManagerType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="token" type="TokenType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="resource" type="ResourceType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="proposal" type="ProposalType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="mechanism" type="MechanismType" minOccurs="0" maxOccurs="unbounded" />
+                <!--mechanisms -->
+                <xs:element name="VoteRightAllocation" type="VoteRightAllocationType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="ProposalRightAllocation" type="ProposalRightAllocationType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="PriceControl" type="PriceControlType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="Exchange" type="ExchangeType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="AutomatedMarketMaker" type="AutomatedMarketMakerType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="TokenIssuance" type="TokenIssuanceType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="RevenueManagement" type="RevenueManagementType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="Incentive" type="IncentiveType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="VotePolling" type="VotePollingType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="VoteTallying" type="VoteTallyingType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="ProposalExecution" type="ProposalExecutionType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="decisionMakingSupport" type="DecisionMakingSupportType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="disputeResolution" type="DisputeResolutionType" minOccurs="0" maxOccurs="unbounded" />
+                <!--executon layer -->
+                <xs:element name="asset" type="AssetType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="transaction" type="TransactionType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="dataStore" type="DataStoreType" minOccurs="0" maxOccurs="unbounded" />
+                <!--basic T-DM elements -->
+                <xs:element name="goal" type="GoalType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="qualitygoal" type="QualityGoalType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="emotionalgoal" type="EmotionalGoalType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="agent" type="AgentType" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!-- GoalType -->
+    <xs:complexType name="GoalType">
+        <xs:sequence>
+            <xs:element name="refinement_level" type="xs:integer" />
+            <xs:element name="goal_value" type="xs:string" />
+        </xs:sequence>
+        <xs:attribute name="goal_id" type="xs:ID" use="required" />
+        <xs:attribute name="decomposed_from" type="xs:IDREFS" use="optional" />
+        <xs:attribute name="onchain" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="onchain|offchain|snapshot" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <!-- MechanismType -->
+    <xs:complexType name="MechanismType">
+        <xs:complexContent>
+            <xs:extension base="GoalType">
+                <xs:sequence>
+                    <xs:element name="activation_condition" type="xs:string" />
+                    <xs:element name="executive_action" type="xs:string" />
+                </xs:sequence>
+                <xs:attribute name="mechanism_type" type="MechanismTypeEnum" use="required" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- TreasuryType -->
+    <xs:complexType name="TreasuryType">
+        <xs:complexContent>
+            <xs:extension base="GoalType">
+                <xs:sequence>
+                    <xs:element name="DAO_fiscal_policy_goal" type="xs:string" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- DecisionMakingMethodType -->
+    <xs:complexType name="DecisionMakingMethodType">
+        <xs:complexContent>
+            <xs:extension base="GoalType">
+                <xs:sequence>
+                    <xs:element name="DM_scope" type="xs:string" />
+                    <xs:element name="DM_method" type="xs:string" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- TokenType -->
+    <xs:complexType name="TokenType">
+        <xs:complexContent>
+            <xs:extension base="GoalType">
+                <xs:sequence>
+                    <xs:element name="token_utility" type="xs:string" />
+                    <xs:element name="store_of_value" type="xs:boolean" />
+                    <xs:element name="transferable" type="xs:boolean" />
+                    <xs:element name="fungible">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="FT"/>
+                                    <xs:enumeration value="NFT"/>
+                                    <xs:enumeration value="SFT"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- TokenManagerType -->
+    <xs:complexType name="TokenManagerType">
+        <xs:complexContent>
+            <xs:extension base="GoalType">
+                <xs:sequence>
+                    <xs:element name="tokenomic_policy_goal" type="xs:string" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- OrganizationGoalType -->
+    <xs:complexType name="OrganizationGoalType">
+        <xs:complexContent>
+            <xs:extension base="GoalType">
+                <xs:sequence>
+                    <xs:element name="mission_statement" type="xs:string" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- ResourceType-->
+    <xs:complexType name="ResourceType">
+        <xs:sequence>
+            <xs:element name="resource_type" minOccurs="0" type="xs:string" />
+            <xs:element name="valuation" minOccurs="0" type="xs:int" />
+            <xs:element name="unit_of_account" minOccurs="0" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="associated_to" type="xs:IDREF" use="required" />
+        <xs:attribute name="resource_ID" type="xs:ID" use="required" />
+    </xs:complexType>
+    <!-- ProposalType -->
+    <xs:complexType name="ProposalType">
+        <xs:sequence>
+            <xs:element name="allowed_state" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+            <xs:element name="proposal_rule_description" minOccurs="0" type="xs:string" />
+            <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string" />
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="proposal_id" type="xs:ID" use="required" />
+        <xs:attribute name="associated_to" type="xs:IDREFS" use="optional" />
+    </xs:complexType>
+    <!-- QualityGoalType-->
+    <xs:complexType name="QualityGoalType">
+        <xs:sequence>
+            <xs:element name="qualitygoal_value" type="xs:string" />
+        </xs:sequence>
+        <xs:attribute name="qualitygoal_id" type="xs:ID" use="required" />
+        <xs:attribute name="associated_to" type="xs:IDREF" use="optional" />
+    </xs:complexType>
+    <!-- EmotionalGoalType-->
+    <xs:complexType name="EmotionalGoalType">
+        <xs:complexContent>
+            <xs:extension base="QualityGoalType" />
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- AgentType-->
+    <xs:complexType name="AgentType">
+        <xs:attribute name="role_name" type="xs:string" />
+        <xs:attribute name="agent_id" type="xs:ID" use="required" />
+        <xs:attribute name="autonomous" type="xs:boolean" use="required" />
+    </xs:complexType>
+
+    <!-- Mechanism Types -->
+    <!-- ExchangeType -->
+    <xs:complexType name="ExchangeType">
+        <xs:complexContent>
+            <xs:extension base="MechanismType">
+                <xs:sequence>
+                    <xs:element name="exchange_rate" type="xs:decimal" minOccurs="0" />
+                </xs:sequence>
+                <xs:attribute name="token_refID" type="xs:IDREF" use="required" />
+                <xs:attribute name="Exchanged_for_token_refID" type="xs:IDREF" use="required" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- IncentiveType -->
+    <xs:complexType name="IncentiveType">
+        <xs:complexContent>
+            <xs:extension base="MechanismType">
+                <xs:sequence>
+                    <xs:element name="incentive_type">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="penalty" />
+                                <xs:enumeration value="reward" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="token_refID" type="xs:IDREF" />
+                    <xs:element name="funding_source" minOccurs="0">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="new_supply" />
+                                <xs:enumeration value="reserve" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- RevenueManagementType -->
+    <xs:complexType name="RevenueManagementType">
+        <xs:complexContent>
+            <xs:extension base="MechanismType">
+                <xs:sequence>
+                    <xs:element name="RM_type">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="fee_collection" />
+                                <xs:enumeration value="revenue_allocation" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- VoteRightAllocationType-->
+    <xs:complexType name="VoteRightAllocationType">
+        <xs:complexContent>
+            <xs:extension base="MechanismType">
+                <xs:sequence>
+                    <xs:element name="assignment_method" type="xs:string" />
+                    <xs:element name="accumulation_cost" type="FunctionEquivalenceClassType" />
+                    <xs:element name="token_refID" type="xs:IDREF" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- ProposalRightAllocationType -->
+    <xs:complexType name="ProposalRightAllocationType">
+        <xs:complexContent>
+            <xs:extension base="MechanismType">
+                <xs:sequence>
+                    <xs:element name="assignment_method" type="xs:string" />
+                    <xs:element name="token_refID" type="xs:IDREF" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- PriceControlType -->
+    <xs:complexType name="PriceControlType">
+        <xs:complexContent>
+            <xs:extension base="MechanismType">
+                <xs:sequence>
+                    <xs:element name="price_target" type="xs:decimal" />
+                    <xs:element name="price_pegging">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="1:1" />
+                                <xs:enumeration value="overcollateralized" />
+                                <xs:enumeration value="none" />
+                                <xs:enumeration value="dynamic" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="collateral_type" type="xs:string" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- AutomatedMarketMakerType -->
+    <xs:complexType name="AutomatedMarketMakerType">
+        <xs:complexContent>
+            <xs:extension base="ExchangeType">
+                <xs:sequence>
+                    <xs:element name="D_function_class" type="FunctionEquivalenceClassType" />
+                    <xs:element name="S_function_class" type="FunctionEquivalenceClassType" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- TokenIssuanceType -->
+    <xs:complexType name="TokenIssuanceType">
+        <xs:complexContent>
+            <xs:extension base="MechanismType">
+                <xs:sequence>
+                    <xs:element name="issuance_control_refID" type="xs:IDREF" minOccurs="0"/>
+                    <xs:element name="distribution" minOccurs="0">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="reserve" />
+                                <xs:enumeration value="sale" />
+                                <xs:enumeration value="airdrop" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="supply_target" minOccurs="0">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="fixed" />
+                                <xs:enumeration value="unlimited" />
+                                <xs:enumeration value="dynamic" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="executive_action_type" minOccurs="0">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="mint" />
+                                <xs:enumeration value="burn" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="accumulation_cost" type="FunctionEquivalenceClassType" minOccurs="0" />
+                    <xs:element name="supply_change" type="FunctionEquivalenceClassType" minOccurs="0" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- VotePollingType-->
+    <xs:complexType name="VotePollingType">
+        <xs:complexContent>
+            <xs:extension base="MechanismType">
+                <xs:sequence>
+                    <xs:element name="alternative_selection">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="binary" />
+                                <xs:enumeration value="multiple" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="ballot_type">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="single" />
+                                <xs:enumeration value="multiple" />
+                                <xs:enumeration value="ranked" />
+                                <xs:enumeration value="range" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="proposal_submission">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="continuous" />
+                                <xs:enumeration value="conditional" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- VoteTallyingType-->
+    <xs:complexType name="VoteTallyingType">
+        <xs:complexContent>
+            <xs:extension base="MechanismType">
+                <xs:sequence>
+                    <xs:element name="participation_quorum">
+                    <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                            <xs:minInclusive value="0"/>
+                            <xs:maxInclusive value="100"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="participation_subset" type="xs:string" />
+                    <xs:element name="majority_quorum">
+                    <xs:simpleType>
+                            <xs:restriction base="xs:int">
+                                <xs:minInclusive value="50"/>
+                                <xs:maxInclusive value="100"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="majority_subset" type="xs:string" />
+                    <xs:element name="n_winners" type="xs:int"/>
+
+                    <xs:element name="vote_weight">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="uniform" />
+                                <xs:enumeration value="stake_time"/>
+                                <xs:enumeration value="token_balance"/>
+                                <xs:enumeration value="stake_amount" />
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="token_refID" type="xs:IDREF" />
+                </xs:sequence>
+                <xs:attribute name="mechanism_type" type="MechanismTypeEnum" use="required" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- ProposalExecutionType-->
+    <xs:complexType name="ProposalExecutionType">
+        <xs:complexContent>
+            <xs:extension base="MechanismType">
+                <xs:sequence>
+                    <xs:element name="autonomous_execution" type="xs:boolean" />
+                    <xs:element name="agent_refID" type="xs:IDREF" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- DecisionMakingSupportType-->
+    <xs:complexType name="DecisionMakingSupportType">
+        <xs:complexContent>
+            <xs:extension base="MechanismType">
+                <xs:sequence>
+                    <xs:element name="support_type">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="PoP"/>
+                                <xs:enumeration value="proposal_screening"/>
+                                <xs:enumeration value="vote_delegation"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- DisputeResolutionType -->
+    <xs:complexType name="DisputeResolutionType">
+        <xs:complexContent>
+            <xs:extension base="MechanismType">
+                <xs:sequence>
+                    <xs:element name="DR_type">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="jurisdiction"/>
+                                <xs:enumeration value="sale"/>
+                                <xs:enumeration value="hard_fork"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- AssetType -->
+    <xs:complexType name="AssetType">
+        <xs:complexContent>
+            <xs:extension base="GoalType">
+                <xs:sequence>
+                    <xs:element name="asset_name" minOccurs="1" maxOccurs="1" type="xs:string" />
+                    <xs:element name="parameter" type="xs:string"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- TransactionType -->
+    <xs:complexType name="TransactionType">
+        <xs:complexContent>
+            <xs:extension base="GoalType">
+                <xs:sequence>
+                    <xs:element name="function_name" type="xs:string" />
+                    <xs:element name="operation" type="xs:string" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <!-- DataStoreType -->
+    <xs:complexType name="DataStoreType">
+        <xs:complexContent>
+            <xs:extension base="GoalType">
+                <xs:sequence>
+                    <xs:element name="data_stored" type="xs:string" />
+                    <xs:element name="public" type="xs:boolean" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+<!-- enumeration types -->
+    <xs:simpleType name="FunctionEquivalenceClassType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="log" />
+            <xs:enumeration value="linear" />
+            <xs:enumeration value="quadratic" />
+            <xs:enumeration value="exp" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="MechanismTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Exchange" />
+            <xs:enumeration value="Automated Market Maker" />
+            <xs:enumeration value="Revenue Management" />
+            <xs:enumeration value="Token Issuance" />
+            <xs:enumeration value="Price Control" />
+            <xs:enumeration value="Incentive" />
+            <xs:enumeration value="Dispute Resolution" />
+            <xs:enumeration value="Voting Right Allocation" />
+            <xs:enumeration value="Decision Making Support" />
+            <xs:enumeration value="Vote Polling" />
+            <xs:enumeration value="Proposal Right Allocation" />
+            <xs:enumeration value="Proposal Execution" />
+            <xs:enumeration value="Vote Tallying" />
+            <xs:enumeration value="Other" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

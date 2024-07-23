@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Liquid Studio (https://www.liquid-technologies.com) -->
+<diagram xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="XSD_ETDM_TE.xsd">
+    <diagram_value>Circles DAO Diagram</diagram_value>
+    <organizationGoal goal_id="DAO1">
+        <refinement_level>0</refinement_level>
+        <goal_value>Circles DAO</goal_value>
+        <mission_statement>manage the governance of a Circles Group Currency</mission_statement>
+    </organizationGoal>
+    <treasury goal_id="t1" decomposed_from="DAO1">
+        <refinement_level>1</refinement_level>
+        <goal_value> Group Treasury</goal_value>
+        <DAO_fiscal_policy_goal>Fund local community projects and reward service provisioning</DAO_fiscal_policy_goal>
+    </treasury>
+    <decisionMakingMethod goal_id="dmm1" decomposed_from="DAO1" onchain="snapshot">
+        <refinement_level>2</refinement_level>
+        <goal_value>Community Council Deliberation</goal_value>
+        <DM_scope>Service provision group project budgeting</DM_scope>
+        <DM_method>Optimistic Governance</DM_method>
+    </decisionMakingMethod>
+    <decisionMakingMethod goal_id="dmm2" decomposed_from="DAO1" onchain="onchain">
+        <refinement_level>2</refinement_level>
+        <goal_value>Technical Council Deliberation</goal_value>
+        <DM_scope>Attestations; group membership treasury management</DM_scope>
+        <DM_method>Majority Voting</DM_method>
+    </decisionMakingMethod>
+    <tokenManager goal_id="tm1" decomposed_from="DAO1">
+        <refinement_level>1</refinement_level>
+        <goal_value>Circles DAO token manager</goal_value>
+        <tokenomic_policy_goal>Ensure active participation and commitment to the system</tokenomic_policy_goal>
+    </tokenManager>
+    <token goal_id="PS" decomposed_from="tm1">
+        <refinement_level>2</refinement_level>
+        <goal_value>Perishable Share</goal_value>
+        <token_utility>Reputation; governance</token_utility>
+        <store_of_value>false</store_of_value>
+        <transferable>true</transferable>
+        <fungible>SFT</fungible>
+    </token>
+    <token goal_id="CT" decomposed_from="t1">
+        <refinement_level>2</refinement_level>
+        <goal_value>Circles tokens</goal_value>
+        <token_utility>Governance; financial</token_utility>
+        <store_of_value>false</store_of_value>
+        <transferable>true</transferable>
+        <fungible>SFT</fungible>
+    </token>
+    <token goal_id="GC" decomposed_from="tm1">
+        <refinement_level>2</refinement_level>
+        <goal_value>Group Currency</goal_value>
+        <token_utility>Financial; access</token_utility>
+        <store_of_value>false</store_of_value>
+        <transferable>true</transferable>
+        <fungible>FT</fungible>
+    </token>
+    <token goal_id="EUROE" decomposed_from="t1">
+        <refinement_level>2</refinement_level>
+        <goal_value>Euro stablecoin</goal_value>
+        <token_utility>Financial</token_utility>
+        <store_of_value>false</store_of_value>
+        <transferable>true</transferable>
+        <fungible>FT</fungible>
+    </token>
+    <resource resource_ID="GR_CC" associated_to="PS">
+        <resource_type>Governance Right in Community Council</resource_type>
+    </resource>
+    <resource resource_ID="GM_CT" associated_to="CT">
+        <resource_type>Group Membership</resource_type>
+    </resource>
+    <resource resource_ID="GS_CT" associated_to="CT">
+        <resource_type>Goods and Services by Circles Business Network</resource_type>
+    </resource>
+    <resource resource_ID="NCF_EUROE" associated_to="EUROE">
+        <resource_type>National Currency Funds</resource_type>
+    </resource>
+    <resource resource_ID="S_GC" associated_to="GC">
+        <resource_type>Services Provided by the DAO</resource_type>
+    </resource>
+<proposal proposal_id="p1" associated_to="dmm1">
+    <allowed_state>Pending</allowed_state>
+    <allowed_state>Queued</allowed_state>
+    <allowed_state>Opposed</allowed_state>
+    <allowed_state>Executed</allowed_state>
+    <proposal_rule_description>Proposals are automatically queued for a specific period of time. If the quorum doesn't oppose to them, they are executed.</proposal_rule_description>
+</proposal>
+    <Exchange goal_id="Me1" mechanism_type="Exchange" decomposed_from="t1" onchain="onchain" token_refID="GC" Exchanged_for_token_refID="EUROE">
+        <refinement_level>2</refinement_level>
+        <goal_value>enable conversion of GC for stablecoin</goal_value>
+        <activation_condition>GC or stablecoin transfer</activation_condition>
+        <executive_action>Swap GC for EUROE</executive_action>
+    </Exchange>
+    <TokenIssuance goal_id="Mi2" mechanism_type="Token Issuance" decomposed_from="GC" onchain="onchain">
+        <refinement_level>3</refinement_level>
+        <goal_value>Circles Tokens staking</goal_value>
+        <activation_condition>Circles Tokens staking</activation_condition>
+        <executive_action>Mint and distribute GC tokens to users depositing Circles tokens</executive_action>
+        <distribution>airdrop</distribution>
+        <supply_target>dynamic</supply_target>
+    </TokenIssuance>
+    <TokenIssuance goal_id="Mi3" mechanism_type="Token Issuance" decomposed_from="PS" onchain="onchain">
+        <refinement_level>3</refinement_level>
+        <goal_value>Periodic</goal_value>
+        <activation_condition>Periodic</activation_condition>
+        <executive_action>Burn PS</executive_action>
+    </TokenIssuance>
+    <RevenueManagement goal_id="Mrm3" mechanism_type="Revenue Management" decomposed_from="CT">
+        <refinement_level>3</refinement_level>
+        <goal_value>support local community projects</goal_value>
+        <activation_condition>Funding request approval by DAO</activation_condition>
+        <executive_action>Lend Circles tokens for funding community projects</executive_action>
+        <RM_type>revenue_allocation</RM_type>
+    </RevenueManagement>
+    <RevenueManagement goal_id="Mrm4" mechanism_type="Revenue Management" decomposed_from="EUROE" onchain="onchain">
+        <refinement_level>3</refinement_level>
+        <goal_value>Enable funders to support the DAO financially</goal_value>
+        <activation_condition>Expense approval by Community Council</activation_condition>
+        <executive_action>Pay for expenses in EUROE</executive_action>
+        <RM_type>revenue_allocation</RM_type>
+    </RevenueManagement>
+    <Incentive goal_id="MIn1" mechanism_type="Incentive" decomposed_from="t1" onchain="onchain">
+        <refinement_level>2</refinement_level>
+        <goal_value>Incentivize service provision for the community by the DAO members</goal_value>
+        <activation_condition>Perform service for the community</activation_condition>
+        <executive_action>Distribute GC tokens as rewards</executive_action>
+        <incentive_type>reward</incentive_type>
+        <token_refID>CT</token_refID>
+        <funding_source>new_supply</funding_source>
+    </Incentive>
+    <agent agent_id="DM" role_name="DAO Member" autonomous="false" />
+    <agent agent_id="AM" role_name="Active Member" autonomous="false" />
+    <agent agent_id="CC" role_name="Community Council" autonomous="true" />
+    <agent agent_id="TC" role_name="Technical Council" autonomous="true" />
+    <agent agent_id="CU" role_name="Circles User" autonomous="false" />
+</diagram>
