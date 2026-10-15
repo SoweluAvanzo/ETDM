@@ -397,7 +397,6 @@
                     </xs:element>
                     <xs:element name="token_refID" type="xs:IDREF" />
                 </xs:sequence>
-                <xs:attribute name="mechanism_type" type="MechanismTypeEnum" use="required" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
